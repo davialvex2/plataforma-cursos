@@ -1,9 +1,4 @@
-package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
-
-import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux;
 
 
 public class DadosSaida {

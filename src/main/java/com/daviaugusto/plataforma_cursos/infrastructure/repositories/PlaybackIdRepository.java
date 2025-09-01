@@ -1,6 +1,6 @@
 package com.daviaugusto.plataforma_cursos.infrastructure.repositories;
 
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.PlaybackId;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.PlaybackId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

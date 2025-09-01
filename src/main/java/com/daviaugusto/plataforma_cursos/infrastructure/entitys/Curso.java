@@ -1,6 +1,7 @@
 package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
 
 
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Data;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

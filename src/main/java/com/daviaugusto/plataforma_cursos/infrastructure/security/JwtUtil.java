@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -47,10 +48,10 @@ public class JwtUtil {
     }
 
     // Valida o token JWT verificando o nome de usuário e se o token não está expirado
-    public boolean validateToken(String token, String username) {
+    public boolean validateToken(String token, UserDetails userDatails) {
         // Extrai o nome de usuário do token
         final String extractedUsername = extrairEmailToken(token);
         // Verifica se o nome de usuário do token corresponde ao fornecido e se o token não está expirado
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+        return (extractedUsername.equals(userDatails.getUsername()) && !isTokenExpired(token));
     }
 }

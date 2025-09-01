@@ -2,8 +2,7 @@ package com.daviaugusto.plataforma_cursos.controller;
 
 
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Curso;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Data;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Usuario;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Data;
 import com.daviaugusto.plataforma_cursos.services.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,19 +44,19 @@ public class CursoController {
         return ResponseEntity.ok().build();
     }
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}/aulas")
     public ResponseEntity<List<Data>> buscarAulas(@PathVariable Long id){
         return ResponseEntity.ok(cursoService.buscarVideos(id));
-    }*/
+    }
 
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasRole('PROFESSOR', 'ALUNO')")
     @GetMapping("/{id}")
-    public ResponseEntity<Curso> buscarCursoPorId(@PathVariable Long id,
-                                                  @RequestHeader("Authorization") String token){
+    public ResponseEntity<Curso> buscarCursoPorId(@PathVariable Long id){
         return ResponseEntity.ok(cursoService.buscarCursoPorId(id));
 
     }
 
+    @PreAuthorize("hasRole('ALUNO')")
     @GetMapping
     public ResponseEntity<List<Curso>> buscarCursosInscritos(@RequestHeader("Authorization") String token){
         return ResponseEntity.ok(cursoService.buscarCursosIncritos(token));

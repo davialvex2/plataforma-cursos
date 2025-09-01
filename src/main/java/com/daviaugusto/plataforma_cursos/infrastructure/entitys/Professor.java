@@ -14,6 +14,7 @@ public class Professor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nome;
 
     @JsonIgnore
     @OneToOne
@@ -31,8 +32,9 @@ public class Professor {
     public Professor(){
     }
 
-    public Professor(Long id, Usuario usuario, List<Curso> cursosCriado, String especialidade, LocalDate dataNascimento) {
+    public Professor(Long id, String nome, Usuario usuario, List<Curso> cursosCriado, String especialidade, LocalDate dataNascimento) {
         this.id = id;
+        this.nome = nome;
         this.usuario = usuario;
         this.cursosCriado = cursosCriado;
         this.especialidade = especialidade;
@@ -45,6 +47,14 @@ public class Professor {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Usuario getUsuario() {

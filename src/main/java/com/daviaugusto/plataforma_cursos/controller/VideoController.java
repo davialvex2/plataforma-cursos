@@ -1,7 +1,7 @@
 package com.daviaugusto.plataforma_cursos.controller;
 
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.DadosSaida;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.DadosVideoEntrada;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.DadosSaida;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.DadosVideoEntrada;
 import com.daviaugusto.plataforma_cursos.services.MuxClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

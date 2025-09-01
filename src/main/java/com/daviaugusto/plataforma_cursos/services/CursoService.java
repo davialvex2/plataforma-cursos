@@ -4,8 +4,7 @@ package com.daviaugusto.plataforma_cursos.services;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Curso;
 
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Aluno;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Curso;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Data;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Data;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Usuario;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.CursoRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.UsuarioRepository;
@@ -14,7 +13,6 @@ import com.daviaugusto.plataforma_cursos.infrastructure.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

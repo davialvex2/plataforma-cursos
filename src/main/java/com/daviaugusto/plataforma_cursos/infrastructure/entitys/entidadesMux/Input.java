@@ -1,4 +1,4 @@
-package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
+package com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux;
 
 public class Input {
 

@@ -1,8 +1,8 @@
 package com.daviaugusto.plataforma_cursos.clients;
 
 
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.DadosSaida;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.DadosVideoEntrada;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.DadosSaida;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.DadosVideoEntrada;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,9 +1,8 @@
 package com.daviaugusto.plataforma_cursos.services;
 
 import com.daviaugusto.plataforma_cursos.clients.MuxClient;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.DadosSaida;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.DadosVideoEntrada;
-import com.daviaugusto.plataforma_cursos.infrastructure.entitys.PlaybackId;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.DadosSaida;
+import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.DadosVideoEntrada;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.PlaybackIdRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
