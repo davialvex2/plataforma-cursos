@@ -7,6 +7,7 @@ import com.daviaugusto.plataforma_cursos.infrastructure.enums.RoleEnum;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.AlunoRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.ProfessorRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.UsuarioRepository;
+import com.daviaugusto.plataforma_cursos.infrastructure.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class UsuarioService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
 
 
@@ -61,8 +65,27 @@ public class UsuarioService {
     }
 
     public void excluirUsuario(Long id){
-        Usuario user =usuarioRepository.findById(id).orElseThrow(() ->  new RuntimeException("Usuario não encontrado"));
+        Usuario user = usuarioRepository.findById(id).orElseThrow(() ->  new RuntimeException("Usuario não encontrado"));
         usuarioRepository.delete(user);
+    }
+
+    public Usuario buscarUsuarioPorEmail(String email){
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return usuario;
+    }
+
+    public Usuario alterarEmail(String token, String email){
+        String emailToken = jwtUtil.extrairEmailToken(token.substring(7));
+        Usuario usuario = usuarioRepository.findByEmail(emailToken).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        usuario.setEmail(email);
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario alterarSenha(String token, String senha){
+        String emailToken = jwtUtil.extrairEmailToken(token.substring(7));
+        Usuario usuario = usuarioRepository.findByEmail(emailToken).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        usuario.setSenha(passwordEncoder.encode(senha));
+        return usuarioRepository.save(usuario);
     }
 
 

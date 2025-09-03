@@ -47,5 +47,22 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping
+    public ResponseEntity<Usuario> buscarUsuario(@RequestParam("email") String email){
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
+    }
+
+    @PatchMapping
+    public ResponseEntity<Usuario> alterarEmail(@RequestHeader("Authorization") String token,
+                                                @RequestParam("email") String email){
+        return ResponseEntity.ok(usuarioService.alterarEmail(token, email));
+    }
+
+    @PatchMapping("/{senha}")
+    public ResponseEntity<Usuario> alterarSenha(@RequestHeader("Authorization") String token,
+                                                @PathVariable String senha){
+        return ResponseEntity.ok(usuarioService.alterarSenha(token, senha));
+    }
+
 
 }
