@@ -3,11 +3,13 @@ package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
 
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Data;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
 public class Curso {
 
     @Id
@@ -28,7 +30,7 @@ public class Curso {
     public Curso(){
     }
 
-    public Curso(List<Data> videos, List<Aluno> alunos, String descricao, String nome, Long id) {
+    public Curso(Long id, String nome, String descricao, Professor professor, List<Aluno> alunos, List<Data> videos) {
         this.videos = videos;
         this.alunos = alunos;
         this.descricao = descricao;

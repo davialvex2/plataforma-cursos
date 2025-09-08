@@ -1,9 +1,14 @@
 package com.daviaugusto.plataforma_cursos.services;
 
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.request.AlunoRequest;
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.request.ProfessorRequest;
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.request.UsuarioRequest;
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.response.UsuarioResponse;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Aluno;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Professor;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Usuario;
 import com.daviaugusto.plataforma_cursos.infrastructure.enums.RoleEnum;
+import com.daviaugusto.plataforma_cursos.infrastructure.mapper.UsuarioConverter;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.AlunoRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.ProfessorRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.UsuarioRepository;
@@ -26,9 +31,13 @@ public class UsuarioService {
     @Autowired
     JwtUtil jwtUtil;
 
+    @Autowired
+    UsuarioConverter usuarioConverter;
 
 
-    public Usuario salvarUsuario(Usuario usuario) {
+
+    public UsuarioResponse salvarUsuario(UsuarioRequest usuarioRequest) {
+        Usuario usuario = usuarioConverter.paraUsuario(usuarioRequest);
         verificarEmail(usuario.getEmail());
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         if(usuario.getRole() == RoleEnum.ALUNO){
@@ -38,30 +47,30 @@ public class UsuarioService {
             usuario.getProfessor().setUsuario(usuario);
         }
         Usuario user = usuarioRepository.save(usuario);
-        return user;
+
+        return usuarioConverter.paraUsuarioResponse(user);
     }
 
     public boolean verificarEmail(String email) {
         return usuarioRepository.existsByEmail(email);
     }
 
-    public Usuario buscarUsuario(String email){
-        return usuarioRepository.findByEmail(email).orElseThrow(() ->  new RuntimeException("Usuario não encontrado"));
-    }
 
-    public Usuario atualizarUsuario(Usuario usuario){
-        Usuario user =usuarioRepository.findByEmail(usuario.getEmail()).orElseThrow(() ->  new RuntimeException("Usuario não encontrado"));
+
+    public UsuarioResponse atualizarUsuario(UsuarioRequest usuarioRequest){
+        Usuario user = usuarioConverter.paraUsuario(usuarioRequest);
+        user = usuarioRepository.findByEmail(user.getEmail()).orElseThrow(() ->  new RuntimeException("Usuario não encontrado"));
         if(user.getProfessor() == null){
-            Aluno aluno = atualizarAluno(usuario.getAluno(), user.getAluno());
+            Aluno aluno = atualizarAluno(usuarioRequest.getAluno(), user.getAluno());
             user.setAluno(aluno);
             usuarioRepository.save(user);
         }
         else{
-            Professor prof = atualizarProfessor(usuario.getProfessor(), user.getProfessor());
+            Professor prof = atualizarProfessor(usuarioRequest.getProfessor(), user.getProfessor());
             user.setProfessor(prof);
             usuarioRepository.save(user);
         }
-        return user;
+        return usuarioConverter.paraUsuarioResponse(user);
     }
 
     public void excluirUsuario(Long id){
@@ -69,35 +78,35 @@ public class UsuarioService {
         usuarioRepository.delete(user);
     }
 
-    public Usuario buscarUsuarioPorEmail(String email){
+    public UsuarioResponse buscarUsuarioPorEmail(String email){
         Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        return usuario;
+        return usuarioConverter.paraUsuarioResponse(usuario);
     }
 
-    public Usuario alterarEmail(String token, String email){
+    public UsuarioResponse alterarEmail(String token, String email){
         String emailToken = jwtUtil.extrairEmailToken(token.substring(7));
         Usuario usuario = usuarioRepository.findByEmail(emailToken).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         usuario.setEmail(email);
-        return usuarioRepository.save(usuario);
+        return usuarioConverter.paraUsuarioResponse(usuarioRepository.save(usuario));
     }
 
-    public Usuario alterarSenha(String token, String senha){
+    public UsuarioResponse alterarSenha(String token, String senha){
         String emailToken = jwtUtil.extrairEmailToken(token.substring(7));
         Usuario usuario = usuarioRepository.findByEmail(emailToken).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         usuario.setSenha(passwordEncoder.encode(senha));
-        return usuarioRepository.save(usuario);
+        return usuarioConverter.paraUsuarioResponse(usuarioRepository.save(usuario));
     }
 
 
-    public Aluno atualizarAluno(Aluno aluno, Aluno alunoRepository){
+    public Aluno atualizarAluno(AlunoRequest aluno, Aluno alunoRepository){
         alunoRepository.setNome(aluno.getNome() !=null ? aluno.getNome() : alunoRepository.getNome());
         alunoRepository.setDataNascimento(aluno.getDataNascimento()  !=null ? aluno.getDataNascimento() : alunoRepository.getDataNascimento());
         alunoRepository.setMatricula(aluno.getMatricula() !=null ? aluno.getMatricula() : alunoRepository.getMatricula());
         return alunoRepository;
     }
 
-    public Professor atualizarProfessor(Professor professor, Professor professorRepository){
-        professorRepository.setEspecialidade(professor.getNome() != null ? professor.getNome() : professorRepository.getNome());
+    public Professor atualizarProfessor(ProfessorRequest professor, Professor professorRepository){
+        professorRepository.setNome(professor.getNome() != null ? professor.getNome() : professorRepository.getNome());
         professorRepository.setDataNascimento(professor.getDataNascimento() != null ? professor.getDataNascimento() : professorRepository.getDataNascimento());
         professorRepository.setEspecialidade(professor.getEspecialidade() != null ? professor.getEspecialidade() : professorRepository.getEspecialidade());
         return professorRepository;

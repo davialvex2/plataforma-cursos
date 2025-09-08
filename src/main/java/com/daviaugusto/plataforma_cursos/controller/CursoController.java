@@ -1,6 +1,8 @@
 package com.daviaugusto.plataforma_cursos.controller;
 
 
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.request.CursoRequest;
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.response.CursoResponse;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Curso;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Data;
 import com.daviaugusto.plataforma_cursos.services.CursoService;
@@ -22,8 +24,8 @@ public class CursoController {
 
     @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping
-    public ResponseEntity<Curso> salvarCurso(@RequestBody Curso curso,
-                                             @RequestHeader("Authorization") String token) {
+    public ResponseEntity<CursoResponse> salvarCurso(@RequestBody CursoRequest curso,
+                                                     @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(cursoService.salvarCurso(curso, token));
     }
 
@@ -51,14 +53,14 @@ public class CursoController {
 
     @PreAuthorize("hasRole('PROFESSOR', 'ALUNO')")
     @GetMapping("/{id}")
-    public ResponseEntity<Curso> buscarCursoPorId(@PathVariable Long id){
+    public ResponseEntity<CursoResponse> buscarCursoPorId(@PathVariable Long id){
         return ResponseEntity.ok(cursoService.buscarCursoPorId(id));
 
     }
 
     @PreAuthorize("hasRole('ALUNO')")
     @GetMapping
-    public ResponseEntity<List<Curso>> buscarCursosInscritos(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<CursoResponse>> buscarCursosInscritos(@RequestHeader("Authorization") String token){
         return ResponseEntity.ok(cursoService.buscarCursosIncritos(token));
     }
 

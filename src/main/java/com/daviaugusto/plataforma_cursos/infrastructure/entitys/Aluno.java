@@ -3,6 +3,7 @@ package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
 public class Aluno {
 
     @Id
@@ -22,6 +24,7 @@ public class Aluno {
     @JoinColumn(name = "usuario_id", unique = true)
     private Usuario usuario;
 
+    @Builder.Default
     @JsonIgnore
     @ManyToMany(mappedBy = "alunos")
     private List<Curso> cursos = new ArrayList<>();

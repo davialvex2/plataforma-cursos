@@ -4,6 +4,7 @@ package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
 import com.daviaugusto.plataforma_cursos.infrastructure.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Builder
 public class Usuario implements UserDetails {
 
     @Id
@@ -33,11 +35,13 @@ public class Usuario implements UserDetails {
     public Usuario(){
     }
 
-    public Usuario(Long id, String email, String senha, RoleEnum role) {
+    public Usuario(Long id, String email, String senha, RoleEnum role, Professor professor, Aluno aluno) {
         this.id = id;
         this.email = email;
         this.senha = senha;
         this.role = role;
+        this.professor = professor;
+        this.aluno = aluno;
     }
 
     public Long getId() {

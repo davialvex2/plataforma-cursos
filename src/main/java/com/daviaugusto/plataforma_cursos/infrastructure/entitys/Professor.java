@@ -3,12 +3,14 @@ package com.daviaugusto.plataforma_cursos.infrastructure.entitys;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
 public class Professor {
 
     @Id
@@ -21,6 +23,7 @@ public class Professor {
     @JoinColumn(name = "usuario_id", unique = true)
     private Usuario usuario;
 
+    @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Curso> cursosCriado = new ArrayList<>();

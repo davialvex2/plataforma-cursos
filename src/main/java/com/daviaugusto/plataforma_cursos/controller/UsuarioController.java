@@ -1,5 +1,8 @@
 package com.daviaugusto.plataforma_cursos.controller;
 
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.request.LoginRequest;
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.request.UsuarioRequest;
+import com.daviaugusto.plataforma_cursos.infrastructure.dtos.response.UsuarioResponse;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Usuario;
 import com.daviaugusto.plataforma_cursos.infrastructure.security.JwtUtil;
 import com.daviaugusto.plataforma_cursos.services.UsuarioService;
@@ -26,18 +29,18 @@ public class UsuarioController {
 
 
     @PostMapping("/login")
-    public String login (@RequestBody Usuario usuario){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha()));
+    public String login (@RequestBody LoginRequest login){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.email(), login.senha()));
         return "Bearer " + jwtUtil.generateToken(authentication.getName());
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> salvarUsuario(@RequestBody Usuario usuario){
-        return ResponseEntity.ok(usuarioService.salvarUsuario(usuario));
+    public ResponseEntity<UsuarioResponse> salvarUsuario(@RequestBody UsuarioRequest usuarioRequest){
+        return ResponseEntity.ok(usuarioService.salvarUsuario(usuarioRequest));
     }
 
     @PutMapping
-    public ResponseEntity<Usuario> atualizarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<UsuarioResponse> atualizarUsuario(@RequestBody UsuarioRequest usuario){
         return ResponseEntity.ok(usuarioService.atualizarUsuario(usuario));
     }
 
@@ -48,18 +51,18 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> buscarUsuario(@RequestParam("email") String email){
+    public ResponseEntity<UsuarioResponse> buscarUsuario(@RequestParam("email") String email){
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
     }
 
     @PatchMapping
-    public ResponseEntity<Usuario> alterarEmail(@RequestHeader("Authorization") String token,
+    public ResponseEntity<UsuarioResponse> alterarEmail(@RequestHeader("Authorization") String token,
                                                 @RequestParam("email") String email){
         return ResponseEntity.ok(usuarioService.alterarEmail(token, email));
     }
 
     @PatchMapping("/{senha}")
-    public ResponseEntity<Usuario> alterarSenha(@RequestHeader("Authorization") String token,
+    public ResponseEntity<UsuarioResponse> alterarSenha(@RequestHeader("Authorization") String token,
                                                 @PathVariable String senha){
         return ResponseEntity.ok(usuarioService.alterarSenha(token, senha));
     }
