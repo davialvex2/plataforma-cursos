@@ -8,6 +8,7 @@ import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Curso;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Aluno;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Data;
 import com.daviaugusto.plataforma_cursos.infrastructure.entitys.Usuario;
+import com.daviaugusto.plataforma_cursos.infrastructure.exceptions.ResourceNotFoundException;
 import com.daviaugusto.plataforma_cursos.infrastructure.mapper.CursoConverter;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.CursoRepository;
 import com.daviaugusto.plataforma_cursos.infrastructure.repositories.UsuarioRepository;
@@ -41,9 +42,9 @@ public class CursoService {
 
     public CursoResponse salvarCurso(CursoRequest cursoRequest, String token){
         String email = jwtUtil.extrairEmailToken(token.substring(7));
-        Usuario user = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario user = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
         if(Objects.isNull(cursoRequest)){
-            throw new RuntimeException("Dados do curso estão invalidos");
+            throw new IllegalArgumentException("Dados do curso estão invalidos");
         }
         Curso curso = cursoConverter.paraCurso(cursoRequest);
         curso.setProfessor(user.getProfessor());
@@ -52,8 +53,8 @@ public class CursoService {
 
     public void inscreverAluno(Long id, String token){
         String email = jwtUtil.extrairEmailToken(token.substring(7));
-        Usuario user = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
-        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new RuntimeException("Curso não encontrado"));
+        Usuario user = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
+        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         List<Aluno> lista = curso.getAlunos();
         lista.add(user.getAluno());
         curso.setAlunos(lista);
@@ -62,8 +63,8 @@ public class CursoService {
 
 
     public void adicionarVideo(Long idCurso, Long idVideo, String token){
-        Data data = videoRepository.findById(idVideo).orElseThrow(() -> new RuntimeException("Video não encontrado"));
-        Curso curso = cursoRepository.findById(idCurso).orElseThrow(() -> new RuntimeException("Curso não encontrado"));
+        Data data = videoRepository.findById(idVideo).orElseThrow(() -> new ResourceNotFoundException("Video não encontrado"));
+        Curso curso = cursoRepository.findById(idCurso).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         List<Data> lista = curso.getVideos();
         lista.add(data);
         curso.setVideos(lista);
@@ -71,7 +72,7 @@ public class CursoService {
     }
 
     public List<Data> buscarVideos(Long id){
-        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new RuntimeException("Curso não encontrado"));
+        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         if(curso.getVideos().isEmpty()){
             throw new RuntimeException("O curso não possui nenhuma aula");
         }
@@ -80,16 +81,16 @@ public class CursoService {
 
 
     public CursoResponse buscarCursoPorId(Long id){
-        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new RuntimeException("Curso não encontrado"));
+        Curso curso = cursoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"));
         return cursoConverter.paraCursoResponse(curso);
     }
 
     public List<CursoResponse> buscarCursosIncritos(String token){
         String email = jwtUtil.extrairEmailToken(token.substring(7));
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
         List<Curso> cursos = usuario.getAluno().getCursos();
         if(cursos.isEmpty()){
-            throw new RuntimeException("O aluno nã está inscrito em nenhum curso");
+            throw new IllegalArgumentException("O aluno nã está inscrito em nenhum curso");
         }
         return cursoConverter.paraListaCursoResponse(cursos);
     }

@@ -5,6 +5,7 @@ import com.daviaugusto.plataforma_cursos.infrastructure.entitys.entidadesMux.Dad
 import com.daviaugusto.plataforma_cursos.services.MuxClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,12 +16,14 @@ public class VideoController {
     private MuxClientService service;
 
 
+
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping
     ResponseEntity<DadosSaida> inserirVideo(@RequestBody DadosVideoEntrada entrada){
         return ResponseEntity.ok(service.inserirVideo(entrada));
     }
 
-
+    @PreAuthorize("hasRole('PROFESSOR')")
     @GetMapping("/{id}")
     public ResponseEntity<DadosSaida> buscarVideo(@PathVariable String id){
         return ResponseEntity.ok(service.buscarVideoId(id));

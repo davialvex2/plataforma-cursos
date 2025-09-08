@@ -51,7 +51,7 @@ public class CursoController {
         return ResponseEntity.ok(cursoService.buscarVideos(id));
     }
 
-    @PreAuthorize("hasRole('PROFESSOR', 'ALUNO')")
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ALUNO')")
     @GetMapping("/{id}")
     public ResponseEntity<CursoResponse> buscarCursoPorId(@PathVariable Long id){
         return ResponseEntity.ok(cursoService.buscarCursoPorId(id));
